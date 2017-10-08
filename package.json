@@ -3,16 +3,23 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "postinstall": "(.\\node_modules\\.bin\\yarn install) && (.\\node_modules\\.bin\\webpack --config .\\frontend\\webpack.config.js)"
   },
   "dependencies": {
     "body-parser": "~1.18.2",
     "cookie-parser": "~1.4.3",
+    "copy-webpack-plugin": "^4.1.1",
     "debug": "~2.6.9",
     "express": "~4.15.5",
+    "materialize-css": "^0.100.2",
     "morgan": "~1.9.0",
     "nodemailer": "^4.1.3",
     "pug": "2.0.0-beta11",
-    "serve-favicon": "~2.4.5"
+    "serve-favicon": "~2.4.5",
+    "webpack": "^3.6.0"
+  },
+  "devDependencies": {
+    "yarn": "^1.1.0"
   }
 }

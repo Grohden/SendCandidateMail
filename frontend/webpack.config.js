@@ -3,22 +3,22 @@ const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 // assets.js
-const Assets = require('./assets');
+const Assets = require('../assets');
 
 module.exports = {
     entry: {
-        app: "./public/javascripts/app-front.js",
+        app: "./src/javascripts/app.js",
     },
     output: {
-        path: __dirname + "/public/",
+        path: __dirname + "/build/",
         filename: "[name].bundle.js"
     },
     plugins: [
         new CopyWebpackPlugin(
             Assets.map(asset => {
                 return {
-                    from: path.resolve(__dirname, `./node_modules/${asset}`),
-                    to: path.resolve(__dirname, './public/vendor')
+                    from: path.resolve(__dirname, `../node_modules/${asset}`),
+                    to: path.resolve(__dirname, './build/vendor')
                 };
             })
         )

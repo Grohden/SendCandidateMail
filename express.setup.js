@@ -1,3 +1,5 @@
+//Default routes and other things created by express
+
 const express = require('express');
 const path = require('path');
 const favicon = require('serve-favicon');
@@ -6,8 +8,12 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
 function SetupServer(app){
-    // view engine setup
-    app.set('views', path.join(__dirname, 'views'));
+    /* TODO:
+     * Review this, pug files are compiled every time they are required
+     * it would be better to change them to src folder, then compile ONCE to build
+     * (pug files are like java JSPs if they are used in the current way)
+     */
+    app.set('views', path.join(__dirname, 'frontend/views'));
     app.set('view engine', 'pug');
 
     // uncomment after placing your favicon in /public
@@ -16,7 +22,7 @@ function SetupServer(app){
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(cookieParser());
-    app.use(express.static(path.join(__dirname, 'public')));
+    app.use(express.static(path.join(__dirname, 'frontend/build/')));
 
     // catch 404 and forward to error handler
     app.use(function(req, res, next) {
@@ -25,7 +31,7 @@ function SetupServer(app){
         next(err);
     });
 
-// error handler
+    // error handler
     app.use(function(err, req, res, next) {
         // set locals, only providing error in development
         res.locals.message = err.message;
@@ -38,5 +44,4 @@ function SetupServer(app){
 
 }
 
-
-export default SetupServer;
+module.exports = SetupServer;
