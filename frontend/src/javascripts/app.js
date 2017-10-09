@@ -8,11 +8,11 @@
     let isWaitingRespose = false;
 
     $(document).ready(function(){
-       const form = $("#main_form");
-       const submit = $("#submit_button");
+       const form = $('#main_form');
+       const submit = $('#submit_button');
 
-       form.on("submit", () => submitForm(form));
-       submit.on("click", () => submitForm(form));
+       form.on('submit', () => submitForm(form));
+       submit.on('click', () => submitForm(form));
     });
 
     function toNormalizedObject(parseNumber) {
@@ -27,11 +27,11 @@
 
 
         //Review, i should use lodash..
-        const data = partition(form.serializeArray(), field => field.name.includes("user"));
+        const data = partition(form.serializeArray(), field => field.name.includes('user'));
 
-        fetch(location.origin + "/mail",{
-            method: "POST",
-            headers: new Headers({ "Content-Type": "application/json" }),
+        fetch(location.origin + '/mail',{
+            method: 'POST',
+            headers: new Headers({ 'Content-Type': 'application/json' }),
             /* jshint ignore:start */
             body: JSON.stringify({
                 userData: { ...data[0].map(toNormalizedObject())},
@@ -43,9 +43,13 @@
         return false;
     }
 
-    function showCallbackToUser(){
-
-        //Need a better way to use materialize, with require!
-        Materialize.toast('Enviado, porfavor, cheque a sua caixa de email e de spam.', 4000); // 4000 is the duration of the toast
+    function showCallbackToUser(response){
+        const time = 4000;
+        if(response.ok){
+            //Need a better way to use materialize, with require!
+            Materialize.toast('Enviado, cheque a sua caixa de email e de spam.', time);
+        } else {
+            Materialize.toast('Erro ao enviar o email. revise o seu email por favor.', time);
+        }
     }
 }());
