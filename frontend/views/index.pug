@@ -2,7 +2,7 @@ extends layout
 
 mixin range-options(range, id, name, label)
   div.row
-    div.col.s12
+    div.col.s11
       p=label
       p.range-field
         input(type="range" name=name id=id value="0" min="0" max=range)
@@ -21,11 +21,11 @@ block content
           div.row
             div.input-field.col.s6
               input#user_name.validate(type="text" name="userName" required)
-              label(for="user_name") Seu nome
+              label(for="user_name") Seu nome*
 
             div.input-field.col.s6
               input#user_email.validate(type="email" name="userEmail" data-error="Email invalido" required)
-              label(for="user_email") Seu email
+              label(for="user_email") Seu email*
 
           div.row
             h5 De 0 a 10, como você avaia seus conhecimentos nas seguintes linguagens:
