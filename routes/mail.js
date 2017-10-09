@@ -7,16 +7,13 @@ const transporter = nodemailer.createTransport(TransporterConfigs);
 
 router.post('/', sendEmailToCandidate);
 
-function sendEmailToCandidate(req, res) {
-    const form = {
-        python: 5,
-        css: 5,
-        javascript: 5,
-        ios: 5,
-        android: 5,
-    };
+function sendEmailToCandidate(request, response) {
+    if(!request.body.skillsData || !request.body.userData){
+        response.status(500).json({success: false, error: "Invalid body"});
+        return;
+    }
 
-    const suits = Suits(form);
+    const suits = Suits(request.body.skillsData);
     if (suits.forFrontend()) {
         //send frontend email
     } else if(suits.forMobile()){
@@ -24,6 +21,7 @@ function sendEmailToCandidate(req, res) {
     } else if(suits.forBackend()){
         //send backend email
     }
+    return;
 
     const text = 'Hello there';
 
@@ -35,7 +33,7 @@ function sendEmailToCandidate(req, res) {
         //html: '' use pug view here
     };
 
-    transporter.sendMail(mailOptions, sentCallback(res));
+    transporter.sendMail(mailOptions, sentCallback(response));
 }
 
 function sentCallback(res) {

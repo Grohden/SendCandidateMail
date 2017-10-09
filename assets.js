@@ -1,10 +1,21 @@
-const CSS = [
-    'materialize-css/dist/css/materialize.min.css',
-    'materialize-css/dist/css/'
-];
+const path = require('path');
+const modules = pathArg => path.resolve(__dirname, `./node_modules/${pathArg}`);
+const build = pathArg => path.resolve(__dirname, `frontend/build/${pathArg}`);
 
-const JS = [
-    'materialize-css/dist/js/materialize.min.js'
-];
+//'materialize-css/dist/*.min.*'
 
-module.exports = [...JS, ...CSS];
+//Need to  look at this : https://github.com/webpack-contrib/copy-webpack-plugin/issues/141
+module.exports = [
+    {
+        from: modules('materialize-css/dist/**/*.min.*'),
+        to: build('materialize-css')
+    },
+    {
+        from: modules('materialize-css/dist/fonts/**/*'),
+        to: build('materialize-css')
+    },
+    {
+        from: modules('jquery/dist/jquery.min.js'),
+        to: build('node_modules/jquery/dist/')
+    }
+];

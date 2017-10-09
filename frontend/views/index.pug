@@ -1,5 +1,43 @@
 extends layout
 
+mixin range-options(range, id, name, label)
+  div.row
+    div.col.s12
+      p=label
+      p.range-field
+        input(type="range" name=name id=id value="0" min="0" max=range)
+
+block scriptsAndCss
+  script(src="app.bundle.js")
+
 block content
-  h1= title
-  p Welcome to #{title}
+  h1
+  .row
+    form#main_form.col.s12()
+      .card
+        .card-content
+          div.row
+            h5 Preencha os dados sobre você:
+          div.row
+            div.input-field.col.s6
+              input#user_name.validate(type="text" name="userName" required)
+              label(for="user_name") Seu nome
+
+            div.input-field.col.s6
+              input#user_email.validate(type="email" name="userEmail" data-error="Email invalido" required)
+              label(for="user_email") Seu email
+
+          div.row
+            h5 De 0 a 10, como você avaia seus conhecimentos nas seguintes linguagens:
+
+          +range-options(10,"range_python",     "html",       "HTML:")
+          +range-options(10,"range_css",        "css",        "CSS:")
+          +range-options(10,"range_javascript", "javascript", "Javascript:")
+          +range-options(10,"range_python",     "python",     "Python:")
+          +range-options(10,"range_django",     "django",     "Django:")
+          +range-options(10,"range_ios",        "ios",        "Desenvolvimento IOS:")
+          +range-options(10,"range_android",    "android",    "Desenvolvimento Android:")
+
+        .card-action
+          button.btn.waves-effect.waves-light(type="button" id="submit_button") Enviar
+            i.material-icons.right send

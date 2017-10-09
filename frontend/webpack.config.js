@@ -6,6 +6,11 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const Assets = require('../assets');
 
 module.exports = {
+    watch: true,
+    watchOptions:{
+        poll:1000,
+        aggregateTimeout: 200
+    },
     entry: {
         app: "./src/javascripts/app.js",
     },
@@ -14,13 +19,6 @@ module.exports = {
         filename: "[name].bundle.js"
     },
     plugins: [
-        new CopyWebpackPlugin(
-            Assets.map(asset => {
-                return {
-                    from: path.resolve(__dirname, `../node_modules/${asset}`),
-                    to: path.resolve(__dirname, './build/vendor')
-                };
-            })
-        )
+        new CopyWebpackPlugin(Assets)
     ]
 };
