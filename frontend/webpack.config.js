@@ -7,8 +7,20 @@ const Assets = require('../assets');
 
 module.exports = {
     watch: true,
-    watchOptions:{
-        poll:1000,
+    module: {
+        loaders: [
+            {
+                test: /\.js?$/,
+                exclude: /node_modules/,
+                loader: 'babel-loader',
+                query: {
+                    presets: ['es2015', 'stage-2']
+                }
+            }
+        ]
+    },
+    watchOptions: {
+        poll: 1000,
         aggregateTimeout: 200
     },
     entry: {

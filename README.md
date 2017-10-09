@@ -17,6 +17,6 @@ to go [here](https://myaccount.google.com/apppasswords)
 and generate a password to use)
 
 Once you provided the right information's you can run
-`npm install` and everything that is needed will be 
+`yarn install` and everything that is needed will be 
 installed and generated.
 You  can start the server with `npm start` and acess it at [localhost:3000/](localhost:3000/)

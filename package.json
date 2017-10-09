@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "postinstall": "(.\\node_modules\\.bin\\yarn install) && (.\\node_modules\\.bin\\webpack --config .\\frontend\\webpack.config.js)"
+    "postinstall": ".\\node_modules\\.bin\\webpack --config .\\frontend\\webpack.config.js"
   },
   "dependencies": {
     "body-parser": "~1.18.2",
@@ -22,6 +22,10 @@
     "webpack": "^3.6.0"
   },
   "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
     "yarn": "^1.1.0"
   }
 }
