@@ -1,6 +1,6 @@
 {
-  "name": "sendmail",
-  "version": "0.0.1",
+  "name": "sendcandidatemail",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "start": "node ./bin/www",

@@ -1,4 +1,4 @@
-# SendMail
+# SendCandidateMail
 
 A simple email send using express, webpack and yarn.
 It's general idea is get a form data from an user, and 
