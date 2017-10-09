@@ -19,4 +19,4 @@ and generate a password to use)
 Once you provided the right information's you can run
 `yarn install` and everything that is needed will be 
 installed and generated.
-You  can start the server with `npm start` and acess it at [localhost:3000/](localhost:3000/)
+You  can start the server with `npm start` and access it at [localhost:3000/](localhost:3000/)
