@@ -1,5 +1,6 @@
 {
   "esnext": true,
+  "quotmark":"single",
   "globals":{
     "angular":true,
     "$":true

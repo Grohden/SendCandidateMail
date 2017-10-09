@@ -7,76 +7,122 @@ const transporter = nodemailer.createTransport(TransporterConfigs);
 
 router.post('/', sendEmailToCandidate);
 
+/**
+ * @typedef {Object} Skills
+ * @property {Number} html
+ * @property {Number} css
+ * @property {Number} javascript
+ * @property {Number} python
+ * @property {Number} django
+ * @property {Number} ios
+ * @property {Number} android
+ */
+
+/**
+ * Mail main route handler
+ * @param {{body:{skillsData:Skills}}}request
+ * @param {Object} response
+ */
 function sendEmailToCandidate(request, response) {
-    if(!request.body.skillsData || !request.body.userData){
-        response.status(500).json({success: false, error: "Invalid body"});
+    if (!request.body.skillsData || !request.body.userData) {
+        response.status(500).json({success: false, message: 'Invalid body'});
         return;
     }
 
-    const suits = Suits(request.body.skillsData);
-    if (suits.forFrontend()) {
-        //send frontend email
-    } else if(suits.forMobile()){
-        //send mobile email
-    } else if(suits.forBackend()){
-        //send backend email
-    }
-    return;
+    MailSender(
+        request.body.skillsData,
+        request.body.userData.userEmail
+    ).sendAll(response);
 
-    const text = 'Hello there';
-
-    const mailOptions = {
-        from: TransporterConfigs.auth.user,
-        to: 'gabrielrodhem@gmail.com', // list of receivers
-        subject: 'Hey, we just sent you an email!', // Subject line
-        text: text
-        //html: '' use pug view here
-    };
-
-    transporter.sendMail(mailOptions, sentCallback(response));
 }
 
-function sentCallback(res) {
-
-    return function (error, info) {
-        if (error) {
-            console.log(error);
-            res.json({yo: 'error'});
-        } else {
-            console.log('Message sent: ' + info.response);
-            res.json({yo: info.response});
-        }
-    };
-}
 
 /**
- * @typedef {Object} SentForm
- * @property {Number} python
- * @property {Number} ios
- * @property {Number} android
- * @property {Number} css
- * @property {Number} javascript
+ * @return {string}
  */
+function MailContentTemplate(type) {
+    return (
+        'Obrigado por se candidatar, assim que tivermos uma vaga disponível ' +
+        'para programador ' + (type || '') + ' entraremos em contato.'
+    ).replace(/\s+/g, ' ');
+}
 
-/** @param {SentForm} form */
-function Suits(form) {
+
+function MailConfiguration(userEmail) {
+    return (type) => ({
+        from: TransporterConfigs.auth.user,
+        to: userEmail,
+        subject: 'Obrigado por se candidatar',
+        text: MailContentTemplate(type)
+    });
+}
+
+
+/**
+ *  @param {Skills} form
+ *  @param {String} userEmail
+ */
+function MailSender(form, userEmail) {
+    const userMail = MailConfiguration(userEmail);
+    const minimum = x => x >= 7;
+    const isFront = minimum(form.javascript) && minimum(form.css) && minimum(form.html);
+    const isBack = minimum(form.python) && minimum(form.django);
+    const isMobile = minimum(form.ios) && minimum(form.android);
+    const isNone = !isBack && !isFront && !isMobile;
+
+    const sentEmails = [];
+
+    if (isNone) {
+        sentEmails.push(userMail());
+    }
+    else {
+        if (isFront) {
+            sentEmails.push(userMail('Front-End'));
+        }
+        if (isMobile) {
+            sentEmails.push(userMail('Mobile'));
+        }
+        if (isBack) {
+            sentEmails.push(userMail('Back-end'));
+        }
+    }
 
     return {
-        /** @return boolean */
-        forFrontend() {
-            return form.javascript > 7;
-        },
-
-        /** @return boolean */
-        forBackend() {
-            return form.javascript > 7;
-        },
-
-        /** @return boolean */
-        forMobile() {
-            return form.javascript > 7;
+        sendAll(response) {
+            Promise
+                .all(sentEmails.map(toPromises))
+                .then(function () {
+                    response.status(200).json({success: true});
+                })
+                .catch(function (error) {
+                    response.status(500).json({
+                        success: false,
+                        message: 'Error sending one email',
+                        error: error
+                    });
+                });
         }
     };
 }
+
+function toPromises(mailOptions) {
+    return new Promise(getMailResolver(mailOptions));
+}
+
+function getMailResolver(mailOptions) {
+    return (resolve, reject) => {
+        function errorHandler(error, info) {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(info.response);
+            }
+        }
+
+        transporter.sendMail(mailOptions, errorHandler);
+    };
+
+}
+
 
 module.exports = router;

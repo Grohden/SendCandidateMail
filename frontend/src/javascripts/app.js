@@ -32,10 +32,12 @@
         fetch(location.origin + "/mail",{
             method: "POST",
             headers: new Headers({ "Content-Type": "application/json" }),
+            /* jshint ignore:start */
             body: JSON.stringify({
                 userData: { ...data[0].map(toNormalizedObject())},
                 skillsData: { ...data[1].map(toNormalizedObject(true))}
             }),
+            /* jshint ignore:end */
         }).then(showCallbackToUser);
 
         return false;
